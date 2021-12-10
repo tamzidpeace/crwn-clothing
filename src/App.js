@@ -1,8 +1,6 @@
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-
-import './App.css';
-
 import HomePage from './pages/homepage/homepage.component';
+import './App.css';
 
 const HatsPage = () => (
   <div>
