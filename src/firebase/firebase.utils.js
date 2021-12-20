@@ -2,13 +2,39 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 const config = {
-    apiKey: "AIzaSyDjFiTs-j3PSiDjKW3DJj8r8X3LRIRSUpw",
-    authDomain: "fir-practice-77990.firebaseapp.com",
-    databaseURL: "https://fir-practice-77990.firebaseio.com",
-    projectId: "fir-practice-77990",
-    storageBucket: "fir-practice-77990.appspot.com",
-    messagingSenderId: "24332734484",
-    appId: "1:24332734484:web:c8bd5eb35d7459279a1701"
+  apiKey: "AIzaSyDjFiTs-j3PSiDjKW3DJj8r8X3LRIRSUpw",
+  authDomain: "fir-practice-77990.firebaseapp.com",
+  databaseURL: "https://fir-practice-77990.firebaseio.com",
+  projectId: "fir-practice-77990",
+  storageBucket: "fir-practice-77990.appspot.com",
+  messagingSenderId: "24332734484",
+  appId: "1:24332734484:web:c8bd5eb35d7459279a1701"
+}
+
+export const createUserProfileDocument = async (userAuth, additionalData) => {
+  if (!userAuth) return;
+
+  const userRef = firestore.doc(`users/${userAuth.uid}`);
+  const snapShot = await userRef.get();
+
+  if (!snapShot.exists) {
+    const { displayName, email } = userAuth;
+    const createdAt = new Date();
+
+
+    try {
+      await userRef.set({
+        displayName,
+        email,
+        createdAt,
+        ...additionalData,
+      })
+    } catch (error) {
+      console.log('error creating user: ', error.message);
+    }
+  }
+
+  return userRef;
 }
 
 firebase.initializeApp(config);
